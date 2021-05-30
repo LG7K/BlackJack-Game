@@ -1,7 +1,8 @@
 ﻿
 var pontosJogadores = {
     placar1: [],
-    placar2: []
+    placar2: [],
+    winner: 0
 }
 
 parar2();
@@ -37,6 +38,7 @@ function pontosJogador1(valor) {
         placarJogadores(1, totalJogador1 + " GANHOU!!!");
         youWon();
         parar1();
+        showsWinner(1);
         return;
     }
 
@@ -45,6 +47,7 @@ function pontosJogador1(valor) {
         parar1();
         parar2();
         youLoose();
+        showsLoser(1);
         return;
     }
 
@@ -61,6 +64,7 @@ function pontosJogador2(valor) {
         placarJogadores(2, totalJogador2 + " GANHOU!!!");
         youWon();
         parar2();
+        showsWinner(2);
         return;
     }
 
@@ -69,6 +73,7 @@ function pontosJogador2(valor) {
         parar1();
         parar2();
         youLoose();
+        showsLoser(2);
         return;
     }
 
@@ -90,6 +95,18 @@ function youLoose() {
 function placarJogadores(jogador, total) {
     let placarJogadorAtual = document.getElementById(jogador === 1 ? 'jogador1pontos' : 'jogador2pontos');
     placarJogadorAtual.innerHTML = total;
+}
+
+function showsWinner(winner) {
+    setTimeout(function () {
+        alert("O Jogador " + winner + " ganhou!!!");
+    }, 1000);
+}
+
+function showsLoser(loser) {
+    setTimeout(function () {
+        alert("O Jogador " + loser + " perdeu!!!");
+    }, 1000);
 }
 
 
@@ -117,16 +134,43 @@ function parar1() {
 }
 
 function parar2() {
-    //var btn_jogador1 = document.getElementById("btn_jogador_1");
-    //var btn_parar1 = document.getElementById("btn_parar_1");
     var btn_jogador2 = document.getElementById("btn_jogador_2");
     var btn_parar2 = document.getElementById("btn_parar_2");
 
     $(btn_jogador2).attr('disabled', 'disabled');
     $(btn_parar2).attr('disabled', 'disabled');
 
-    /*$(btn_jogador1).removeAttr('disabled');
-    $(btn_parar1).removeAttr('disabled');*/
+    compareResults();
+}
+
+function compareResults() {
+    var placarJogador1 = document.getElementById('jogador1pontos');
+    var placarJogador2 = document.getElementById('jogador2pontos');
+
+    var totalJogador1 = parseInt(placarJogador1.innerHTML);
+    var totalJogador2 = parseInt(placarJogador2.innerHTML);
+
+    if (totalJogador1 === 0 && totalJogador2 === 0) {
+        return;
+    }
+
+    if ((totalJogador1 > totalJogador2) && totalJogador1 <= 21) {
+        placarJogador1.innerHTML += " GANHOU!!!"
+        showsWinner(1);
+        return;
+    }
+
+    if ((totalJogador2 > totalJogador1) && totalJogador2 <= 21) {
+        placarJogador2.innerHTML += " GANHOU!!!"
+        showsWinner(2);
+        return;
+    }
+
+    if (totalJogador1 === totalJogador2) {
+        placarJogador1.innerHTML = "EMPATE!!!";
+        placarJogador2.innerHTML = "EMPATE!!!";
+        return;
+    }
 }
 
 function reiniciar() {
